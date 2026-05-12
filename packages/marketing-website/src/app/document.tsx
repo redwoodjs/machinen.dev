@@ -5,18 +5,22 @@ export const Document: React.FC<{ children: React.ReactNode }> = ({
     <head>
       <meta charSet="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
-      <title>@redwoodjs/starter-minimal</title>
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link
-        rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossOrigin=""
+      <title>machinen</title>
+      <meta
+        name="description"
+        content="A VM with a single goal: hand off between hosts. Freeze a Linux microVM on one machine, thaw it on another; the process resumes exactly where it left off."
       />
       <link
-        rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=optional"
-        precedence="first"
+        rel="icon"
+        href="/favicon-light.svg"
+        media="(prefers-color-scheme: light)"
       />
+      <link
+        rel="icon"
+        href="/favicon-dark.svg"
+        media="(prefers-color-scheme: dark)"
+      />
+      <link rel="alternate" type="text/markdown" href="/index.md" />
       <link rel="modulepreload" href="/src/client.tsx" />
     </head>
     <body>

@@ -1,6 +1,7 @@
 import { defineConfig } from "vite";
 import { redwood } from "rwsdk/vite";
 import { cloudflare } from "@cloudflare/vite-plugin";
+import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
   plugins: [
@@ -8,5 +9,6 @@ export default defineConfig({
       viteEnvironment: { name: "worker" },
     }),
     redwood(),
+    tailwindcss(),
   ],
 });

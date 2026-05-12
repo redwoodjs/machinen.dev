@@ -1,6 +1,3 @@
-import { Welcome } from "./welcome.js";
+import { Landing } from "./landing.js";
 
-export const Home = () => {
-  // _Feel free to delete this element and its import_
-  return <Welcome />;
-};
+export const Home = () => <Landing />;

@@ -1,0 +1,16 @@
+# machinen
+
+> A VM with a single goal: hand off between hosts. Freeze a Linux microVM on one machine, thaw it on another; the program picks up exactly where it left off — like waking a laptop from sleep, except on a different computer.
+
+A native arm64 microVM runtime. Node.js is the first-class target; Python, bash, and anything else that boots in a Linux VM works too. Snapshot, restore, and fork live processes across hosts with their heap, file descriptors, and timers intact.
+
+The runtime source is not yet published. The companion website source is at https://github.com/redwoodjs/machinen.dev.
+
+## Pages
+
+- [Landing](https://machinen.dev/index.md): One-line pitch and project status.
+
+## Reference
+
+- [README](https://github.com/redwoodjs/machinen.dev/blob/main/README.md): Install, quickstart (bake / boot / handoff), fork, and runtime API.
+- [Repository](https://github.com/redwoodjs/machinen.dev): Marketing site source. Runtime source is not yet public.
