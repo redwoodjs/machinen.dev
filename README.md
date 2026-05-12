@@ -11,6 +11,8 @@ off — like waking a laptop from sleep, except on a different computer.
 A native arm64 microVM runtime under the hood. Node.js is the first-class
 target; Python, bash, and anything else that boots in a Linux VM works too.
 
+> **Note:** the source code isn't published yet — it'll be available here soon.
+
 ## Install
 
 ```bash
