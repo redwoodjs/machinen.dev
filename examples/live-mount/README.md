@@ -8,7 +8,7 @@ writes show up on the host.
 
 ```sh
 pnpm install
-pnpm start
+node --import tsx run.ts
 ```
 
 From another terminal:
