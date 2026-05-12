@@ -1,0 +1,15 @@
+{
+  "name": "machinen-example-quickstart",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node --import tsx bake.ts"
+  },
+  "dependencies": {
+    "@machinen/runtime": "latest"
+  },
+  "devDependencies": {
+    "tsx": "^4"
+  }
+}

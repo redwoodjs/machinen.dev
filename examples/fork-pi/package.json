@@ -1,0 +1,16 @@
+{
+  "name": "machinen-example-fork-pi",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "bake": "node --import tsx bake.ts",
+    "start": "node --import tsx run.ts"
+  },
+  "dependencies": {
+    "@machinen/runtime": "latest"
+  },
+  "devDependencies": {
+    "tsx": "^4"
+  }
+}
