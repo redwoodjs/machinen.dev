@@ -1,5 +1,167 @@
 # @machinen/runtime
 
+## Contents
+
+### Boot a VM
+
+- [`boot`](#boot)
+- [`BootOptions`](#bootoptions)
+- [`attach`](#attach)
+- [`AttachOptions`](#attachoptions)
+- [`bootPty`](#bootpty)
+- [`PtyBootOptions`](#ptybootoptions)
+- [`PtyVmHandle`](#ptyvmhandle)
+- [`VmHandle`](#vmhandle)
+- [`ImageConfig`](#imageconfig)
+- [`autoSizeMemoryMib`](#autosizememorymib)
+- [`resolveVmmBinary`](#resolvevmmbinary)
+- [`warmImageConfigCache`](#warmimageconfigcache)
+- [`measureFirstByte`](#measurefirstbyte)
+
+### Run code in a VM
+
+- [`VsockExec`](#vsockexec)
+- [`VsockExecOptions`](#vsockexecoptions)
+- [`VsockExecResult`](#vsockexecresult)
+- [`VsockExecPtyHandle`](#vsockexecptyhandle)
+- [`VsockExecPtyOptions`](#vsockexecptyoptions)
+- [`VsockExecPtyResult`](#vsockexecptyresult)
+
+### Snapshot, restore, fork
+
+- [`restore`](#restore)
+- [`RestoreOptions`](#restoreoptions)
+- [`ForkOptions`](#forkoptions)
+- [`SnapshotOptions`](#snapshotoptions)
+- [`SnapshotResult`](#snapshotresult)
+- [`SnapshotMeta`](#snapshotmeta)
+- [`bootSnapshotPath`](#bootsnapshotpath)
+- [`writeBootSnapshot`](#writebootsnapshot)
+- [`detachedLogRoot`](#detachedlogroot)
+
+### Provision base images
+
+- [`provision`](#provision)
+- [`ProvisionOptions`](#provisionoptions)
+- [`ProvisionResult`](#provisionresult)
+- [`resolveBaseDtb`](#resolvebasedtb)
+- [`resolveBaseKernel`](#resolvebasekernel)
+- [`resolveBaseRootfs`](#resolvebaserootfs)
+- [`ensureRootfsImage`](#ensurerootfsimage)
+- [`EnsureRootfsImageOptions`](#ensurerootfsimageoptions)
+- [`markRootfsImageClean`](#markrootfsimageclean)
+- [`rootfsImgCacheDir`](#rootfsimgcachedir)
+- [`resolveMke2fs`](#resolvemke2fs)
+
+### Mount files
+
+- [`VsockFiles`](#vsockfiles)
+- [`VsockFilesOptions`](#vsockfilesoptions)
+- [`WriteFileOptions`](#writefileoptions)
+- [`buildWriteFileCmd`](#buildwritefilecmd)
+- [`buildWriteFileCmds`](#buildwritefilecmds)
+- [`ensureMountDiskImage`](#ensuremountdiskimage)
+- [`ensureMountDiskUpper`](#ensuremountdiskupper)
+- [`markMountDiskImageClean`](#markmountdiskimageclean)
+- [`mountdiskImgCacheDir`](#mountdiskimgcachedir)
+- [`resolveMksquashfs`](#resolvemksquashfs)
+- [`EnsureMountDiskImageOptions`](#ensuremountdiskimageoptions)
+- [`EnsureMountDiskImageResult`](#ensuremountdiskimageresult)
+- [`EnsureMountDiskUpperOptions`](#ensuremountdiskupperoptions)
+- [`EnsureMountDiskUpperResult`](#ensuremountdiskupperresult)
+
+### Share secrets
+
+- [`VsockSecrets`](#vsocksecrets)
+- [`VsockSecretsOptions`](#vsocksecretsoptions)
+
+### Terminal control
+
+- [`VsockWinsize`](#vsockwinsize)
+- [`VsockWinsizeOptions`](#vsockwinsizeoptions)
+
+### Manage running VMs
+
+- [`list`](#list)
+- [`registryRoot`](#registryroot)
+- [`RegistryEntry`](#registryentry)
+- [`runGc`](#rungc)
+- [`GcResult`](#gcresult)
+- [`RunGcOptions`](#rungcoptions)
+- [`validatePid`](#validatepid)
+- [`PidStatus`](#pidstatus)
+
+### Multiplex sandboxes
+
+- [`Sandboxes`](#sandboxes)
+- [`Supervisor`](#supervisor)
+- [`SandboxEntry`](#sandboxentry)
+- [`OnOutputListener`](#onoutputlistener)
+- [`SupervisorOptions`](#supervisoroptions)
+
+### Memory introspection
+
+- [`MemoryStats`](#memorystats)
+- [`checkForkBackpressure`](#checkforkbackpressure)
+- [`CheckForkBackpressureOptions`](#checkforkbackpressureoptions)
+- [`DEFAULT_FREE_MEMORY_THRESHOLD`](#default_free_memory_threshold)
+- [`readHostFreeBytes`](#readhostfreebytes)
+- [`readHostTotalBytes`](#readhosttotalbytes)
+- [`readHostRssBytes`](#readhostrssbytes)
+- [`readHostRssBytesMulti`](#readhostrssbytesmulti)
+- [`RssTarget`](#rsstarget)
+- [`readBalloonStats`](#readballoonstats)
+- [`BalloonCounters`](#ballooncounters)
+- [`STATS_FILE_SIZE`](#stats_file_size)
+
+### Logging
+
+- [`ChunkLogEvent`](#chunklogevent)
+- [`LogEvent`](#logevent)
+- [`OnLog`](#onlog)
+- [`PhaseLogEvent`](#phaselogevent)
+
+### Initramfs (advanced)
+
+- [`mkinitramfsBundle`](#mkinitramfsbundle)
+- [`mkinitramfsTinyBundle`](#mkinitramfstinybundle)
+- [`mkinitramfsRootfs`](#mkinitramfsrootfs)
+- [`mkinitramfsWorkspace`](#mkinitramfsworkspace)
+- [`mkinitramfsMinimal`](#mkinitramfsminimal)
+- [`mkinitramfsCli`](#mkinitramfscli)
+- [`PackBundleOptions`](#packbundleoptions)
+- [`PackTinyBundleOptions`](#packtinybundleoptions)
+- [`PackRootfsOptions`](#packrootfsoptions)
+- [`PackMinimalOptions`](#packminimaloptions)
+- [`PackWorkspaceOptions`](#packworkspaceoptions)
+
+### Errors
+
+- [`MachinenError`](#machinenerror)
+- [`BootError`](#booterror)
+- [`ExecError`](#execerror)
+- [`SnapshotError`](#snapshoterror)
+- [`ProvisionError`](#provisionerror)
+- [`RegistryError`](#registryerror)
+- [`FilesError`](#fileserror)
+- [`MountError`](#mounterror)
+- [`SecretsError`](#secretserror)
+- [`WinsizeError`](#winsizeerror)
+- [`SandboxError`](#sandboxerror)
+- [`CacheError`](#cacheerror)
+- [`GvproxyError`](#gvproxyerror)
+- [`MkinitramfsError`](#mkinitramfserror)
+- [`ParseError`](#parseerror)
+- [`ErrorCode`](#errorcode)
+- [`MachinenErrorOptions`](#machinenerroroptions)
+- [`isMachinenError`](#ismachinenerror)
+- [`formatMachinenError`](#formatmachinenerror)
+
+### Internal
+
+- [`_internal`](#_internal)
+
+
 ## Classes
 
 ### MachinenError
