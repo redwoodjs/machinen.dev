@@ -15,5 +15,5 @@ await provision({
     await vm.exec("ln -sf /opt/fnm/aliases/default/bin/* /usr/local/bin/");
   },
   cmd: ["/bin/sleep", "infinity"],
-  out: "./rootfs.tar.gz",
+  out: "./artifacts/rootfs.tar.gz",
 });

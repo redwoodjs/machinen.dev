@@ -7,5 +7,5 @@ await provision({
     await vm.writeFile("/opt/counter.mjs", readFileSync("./counter.mjs"));
   },
   cmd: ["/usr/bin/node", "/opt/counter.mjs"],
-  out: "./rootfs.tar.gz",
+  out: "./artifacts/rootfs.tar.gz",
 });

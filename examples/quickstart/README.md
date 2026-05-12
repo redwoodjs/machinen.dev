@@ -10,12 +10,12 @@ pnpm install
 pnpm start
 ```
 
-Writes `./rootfs.tar.gz`.
+Writes `./artifacts/rootfs.tar.gz`.
 
 ## 2. Boot
 
 ```sh
-npx machinen boot --name counter -p 3000:3000 --detach ./rootfs.tar.gz
+npx machinen boot --name counter -p 3000:3000 --detach ./artifacts/rootfs.tar.gz
 curl localhost:3000   # { "count": 1 }
 curl localhost:3000   # { "count": 2 }
 ```
@@ -23,8 +23,8 @@ curl localhost:3000   # { "count": 2 }
 ## 3. Snapshot and restore
 
 ```sh
-npx machinen snapshot counter ./snapshot
-npx machinen restore ./snapshot -p 3000:3000 --detach
+npx machinen snapshot counter ./artifacts/snapshot
+npx machinen restore ./artifacts/snapshot -p 3000:3000 --detach
 curl localhost:3000   # { "count": 3 }
 ```
 

@@ -1,18 +1,18 @@
 import { existsSync } from "node:fs";
 import { boot, provision } from "@machinen/runtime";
 
-if (!existsSync("./rootfs.tar.gz")) {
+if (!existsSync("./artifacts/rootfs.tar.gz")) {
   await provision({
     install: async (vm) => {
       await vm.exec("apt-get update && apt-get install -y --no-install-recommends nodejs");
     },
     cmd: ["/usr/bin/node", "/mnt/shared/server.mjs"],
-    out: "./rootfs.tar.gz",
+    out: "./artifacts/rootfs.tar.gz",
   });
 }
 
 const vm = await boot({
-  image: "./rootfs.tar.gz",
+  image: "./artifacts/rootfs.tar.gz",
   liveMounts: [{ host: "./shared", guest: "/mnt/shared", mode: "rw" }],
   portForward: [{ hostPort: 8080, guestPort: 3000 }],
 });

@@ -11,14 +11,14 @@ if (!existsSync(piAgentHost)) {
   process.exit(1);
 }
 
-rmSync("./snapshot", { recursive: true, force: true });
+rmSync("./artifacts/snapshot", { recursive: true, force: true });
 
 const source = await boot({
-  image: "./rootfs.tar.gz",
+  image: "./artifacts/rootfs.tar.gz",
   mount: { host: piAgentHost, guest: "/root/.pi/agent" },
 });
 
-await source.snapshot({ outDir: "./snapshot" });
+await source.snapshot({ outDir: "./artifacts/snapshot" });
 
 const tasks = [
   { lang: "rust", prompt: "Write fizzbuzz in Rust. Code only." },
@@ -29,8 +29,8 @@ const tasks = [
 const results = await Promise.all(
   tasks.map(async ({ lang, prompt }) => {
     const vm = await restore({
-      snapDir: "./snapshot",
-      image: "./rootfs.tar.gz",
+      snapDir: "./artifacts/snapshot",
+      image: "./artifacts/rootfs.tar.gz",
       name: `pi-${lang}`,
     });
     try {
