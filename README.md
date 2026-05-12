@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="./docs/logo.svg" alt="machinen" />
+</p>
+
 <h1 align="center">M A C H I N E N</h1>
 
 Hand off a running Linux VM between hosts. Freeze it on your laptop, thaw it
@@ -20,6 +24,9 @@ too.
 The right VMM binary is pulled automatically via optional dependencies
 (`@machinen/vmm-arm64-darwin` on Apple Silicon Macs, `@machinen/vmm-arm64-linux`
 on arm64 Linux). No system dependencies.
+
+First run fetches the kernel + rootfs from a Github release on the
+companion repo over plain HTTPS — no auth required.
 
 ## Quickstart
 
@@ -161,7 +168,16 @@ await vm.snapshot({ outDir: "./counter.snap" });
 const restored = await restore({ snapDir: "./counter.snap" });
 ```
 
-## Examples
+## Documentation
+
+- [Quickstart](./docs/quickstart.md) — the same three-step walkthrough
+  with more colour
+- [Guides](./docs/) — recipes for creating VMs, snapshots and forks,
+  mounts, and networking
+- [`@machinen/cli` reference](./docs/api/cli.md) — every command
+  and flag
+- [`@machinen/runtime` reference](./docs/api/runtime.md) — every
+  exported function, type, and error class (typedoc-generated)
 
 Three runnable demos live in [`examples/`](./examples):
 
@@ -185,5 +201,5 @@ npx machinen install --version <tag>            # pin to a specific release tag
 
 ## License
 
-[FSL-1.1-MIT](https://fsl.software/) — Functional Source License. Converts to
-MIT two years after each release.
+[FSL-1.1-MIT](https://fsl.software/) — Functional Source License. Converts to MIT two
+years after each release.
