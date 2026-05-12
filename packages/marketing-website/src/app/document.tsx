@@ -5,11 +5,12 @@ export const Document: React.FC<{ children: React.ReactNode }> = ({
     <head>
       <meta charSet="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
-      <title>machinen</title>
+      <title>machinen — Run frontier AI locally</title>
       <meta
         name="description"
-        content="A VM with a single goal: hand off between hosts. Freeze a Linux microVM on one machine, thaw it on another; the process resumes exactly where it left off."
+        content="Run frontier AI locally. Pause, resume, or fork VMs to run on different hosts. Handoff for VMs."
       />
+      <meta name="theme-color" content="#09090b" />
       <link
         rel="icon"
         href="/favicon-light.svg"

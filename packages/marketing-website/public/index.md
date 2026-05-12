@@ -1,6 +1,8 @@
 # machinen
 
-A VM with a single goal: hand off between hosts.
+**Run frontier AI locally.**
+
+Pause, resume, or fork VMs to run on different hosts. Handoff for VMs.
 
 > Note: the source code isn't published yet — it'll be available here soon.
 
