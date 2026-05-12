@@ -7,7 +7,7 @@ process, restore it.
 
 ```sh
 pnpm install
-pnpm start
+node --import tsx bake.ts
 ```
 
 Writes `./artifacts/rootfs.tar.gz`.
