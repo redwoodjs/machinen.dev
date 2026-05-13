@@ -1448,9 +1448,16 @@ Called with each stderr chunk as it arrives (pass-through tee).
 
 > **stdout**: `string`
 
+Concatenated stdout bytes, decoded as UTF-8. Always `""` when the
+caller passed `onStdout` — streaming callers already have the
+bytes and a parallel buffered copy would defeat the streaming
+(and at multi-GB volumes would crash with ERR_STRING_TOO_LONG).
+
 ##### stderr
 
 > **stderr**: `string`
+
+Same shape as `stdout` for the stderr channel + `onStderr`.
 
 ***
 
