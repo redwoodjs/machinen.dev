@@ -5,10 +5,10 @@ export const Document: React.FC<{ children: React.ReactNode }> = ({
     <head>
       <meta charSet="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
-      <title>machinen — Run frontier AI locally</title>
+      <title>Machinen — Hand off a running coding agent between machines</title>
       <meta
         name="description"
-        content="Run frontier AI locally. Pause, resume, or fork VMs to run on different hosts. Handoff for VMs."
+        content="Snapshot a Linux VM on one machine, restore it on another. The agent never restarts: same heap, same open files, same timers."
       />
       <meta name="theme-color" content="#09090b" />
       <link
@@ -22,6 +22,7 @@ export const Document: React.FC<{ children: React.ReactNode }> = ({
         media="(prefers-color-scheme: dark)"
       />
       <link rel="alternate" type="text/markdown" href="/index.md" />
+      <link rel="stylesheet" href="/src/styles.css?direct" />
       <link rel="modulepreload" href="/src/client.tsx" />
     </head>
     <body>

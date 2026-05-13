@@ -1,14 +1,119 @@
-# machinen
+# Machinen
 
-> Run frontier AI locally. Pause, resume, or fork VMs to run on different hosts. Handoff for VMs.
+> Move a running VM between hosts. The whole VM keeps running on the other host. All processes, all memory, all open files, all timers.
 
-A native arm64 microVM runtime. Node.js is the first-class target; Python, bash, and anything else that boots in a Linux VM works too. Snapshot, restore, and fork live processes across hosts with their heap, file descriptors, and timers intact — purpose-built for running frontier AI workloads on hardware you control.
+Machinen is a native arm64 microVM runtime. Snapshot a running VM on one machine, restore it on another; every process inside picks up where it left off, with memory, file descriptors, and timers intact. Branch a running VM with `fork` to get two identical copies running side by side. Node.js is the first-class target; anything else that boots in a Linux VM works too. Machinen doesn't run Docker images or OCI bundles — you build the VM in TypeScript via `provision()`.
 
 The runtime source is not yet published. The companion website source is at https://github.com/redwoodjs/machinen.dev.
 
+## Install
+
+```bash
+pnpm add @machinen/cli @machinen/runtime
+```
+
+## Snapshot, restore, fork
+
+**SDK**
+
+```ts
+import { boot, restore } from "@machinen/runtime";
+
+const vm = await boot({ image: "./agent.tar.gz" });
+await vm.snapshot({ outDir: "./agent.snap" });
+const restored = await restore({ snapDir: "./agent.snap" });
+const child = await vm.fork({ name: "agent-b" });
+```
+
+**CLI**
+
+```bash
+$ machinen boot ./agent.tar.gz --name agent --detached
+$ machinen snapshot agent ./agent.snap
+$ machinen restore ./agent.snap
+$ machinen fork agent --new-name agent-b --detach
+```
+
+## Provision (no Docker / OCI)
+
+**SDK** (`bake.ts`)
+
+```ts
+import { provision } from "@machinen/runtime";
+
+await provision({
+  install: async (vm) => {
+    await vm.exec("apt-get install -y nodejs");
+    await vm.writeFile("/opt/agent.mjs", code);
+  },
+  cmd: ["node", "/opt/agent.mjs"],
+  out: "./agent.tar.gz",
+});
+```
+
+**CLI**
+
+```bash
+$ node bake.ts
+```
+
+## Mount (live, bidirectional)
+
+**SDK**
+
+```ts
+const vm = await boot({
+  image: "./agent.tar.gz",
+  liveMounts: [{ host: "./src", guest: "/mnt/src" }],
+});
+```
+
+**CLI**
+
+```bash
+$ machinen boot ./agent.tar.gz --mount-live ./src:/mnt/src
+```
+
+## Forward ports
+
+**SDK**
+
+```ts
+const vm = await boot({
+  image: "./agent.tar.gz",
+  portForward: [
+    { hostPort: 3000, guestPort: 3000 },
+    { hostPort: 8080, guestPort: 80 },
+  ],
+});
+```
+
+**CLI**
+
+```bash
+$ machinen boot ./agent.tar.gz -p 3000:3000 -p 8080:80
+```
+
+## Run code, write files
+
+**SDK**
+
+```ts
+await vm.exec("apt-get install -y python3");
+await vm.writeFile("/etc/agent.conf", config);
+const { stdout } = await vm.exec("ls /opt");
+```
+
+**CLI**
+
+```bash
+$ machinen exec agent -- apt-get install -y python3
+$ machinen exec agent -- ls /opt
+```
+
 ## Pages
 
-- [Landing](https://machinen.dev/index.md): One-line pitch and project status.
+- [Landing](https://machinen.dev/index.md): Hero pitch, install, and side-by-side SDK/CLI for every feature.
 
 ## Reference
 
