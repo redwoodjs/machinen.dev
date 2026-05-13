@@ -1,0 +1,23 @@
+{
+  "name": "machinen-dev",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "bake": "node ./bake.ts",
+    "vm": "node ./vm.ts"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "dependencies": {
+    "@machinen/runtime": "0.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "~25.6.0",
+    "typescript": "^6.0.3"
+  },
+  "pnpm": {
+    "minimumReleaseAgeExclude": ["@machinen/runtime"]
+  }
+}

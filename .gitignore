@@ -65,3 +65,6 @@ coverage
 
 # Wrangler
 .wrangler
+
+# Baked VM rootfs (rebuild with `pnpm bake`)
+rootfs.tar.gz
