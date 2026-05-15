@@ -93,6 +93,7 @@ doesn't translate.
 
 - [Create a VM](./guides/create-a-vm.md) once you want more control over
   what's inside.
+- [Hand off a running VM](./guides/handoff.md) for snapshot → transfer → restore.
 - [Snapshot, restore, and fork](./guides/snapshot-restore-fork.md) covers
   the cloning trick — running two copies of the same process at once.
 - [Mount files into a VM](./guides/mount-files.md) for sharing data
