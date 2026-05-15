@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 
+import { CopyPromptButton } from "./CopyPromptButton";
+
 const ROUND_TRIP_SDK = `import { provision, boot, restore } from "@machinen/runtime";
 
 // 1. Bake the VM. Install the agent's toolchain, write its entrypoint.
@@ -55,17 +57,17 @@ const FORK_SDK = `const child = await vm.fork({ name: "agent-b" });
 
 const FORK_CLI = `$ machinen fork agent --new-name agent-b --detach`;
 
-const ASCII_HEADING = String.raw` ____   ___   ___ _____    ___  _   _  ____ _____ 
+const ASCII_HEADING = String.raw` ____   ___   ___ _____    ___  _   _  ____ _____
 | __ ) / _ \ / _ \_   _|  / _ \| \ | |/ ___| ____|
-|  _ \| | | | | | || |   | | | |  \| | |   |  _|  
-| |_) | |_| | |_| || |   | |_| | |\  | |___| |___ 
+|  _ \| | | | | | || |   | | | |  \| | |   |  _|
+| |_) | |_| | |_| || |   | |_| | |\  | |___| |___
 |____/ \___/ \___/ |_|    \___/|_| \_|\____|_____|
 
- ____  _   _ _   _      _    _   _ __   __ _    _ _   _ _____ ____  _____ 
-|  _ \| | | | \ | |    / \  | \ | |\ \ / /| |  | | | | | ____|  _ \| ____|
-| |_) | | | |  \| |   / _ \ |  \| | \ V / | |/\| | |_| |  _| | |_) |  _|  
-|  _ <| |_| | |\  |  / ___ \| |\  |  | |  |  /\  |  _  | |___|  _ <| |___ 
-|_| \_\\___/|_| \_| /_/   \_\_| \_|  |_|  |_/  \_|_| |_|_____|_| \_\_____|`;
+ ____  _   _ _   _      _______     _______ ______ __   __ _    _ _   _ _____ ____  _____
+|  _ \| | | | \ | |    | ____\ \   / / ____|  _ \\ \ / /| |  | | | | | ____|  _ \| ____|
+| |_) | | | |  \| |    |  _|  \ \ / /|  _| | |_) |\ V / | |/\| | |_| |  _| | |_) |  _|
+|  _ <| |_| | |\  |    | |___  \ V / | |___|  _ <  | |  |  /\  |  _  | |___|  _ <| |___
+|_| \_\\___/|_| \_|    |_____|  \_/  |_____|_| \_\ |_|  |_/  \_|_| |_|_____|_| \_\_____|`;
 
 function SectionTitle({ children }: { children: ReactNode }) {
   return (
@@ -75,15 +77,65 @@ function SectionTitle({ children }: { children: ReactNode }) {
   );
 }
 
+const CODE_TOKEN_PATTERN = /(\/\/[^\n]*|#[^\n]*|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|`(?:\\.|[^`\\])*`|\b(?:import|from|const|let|await|async|new|return|if|else|export|function|type|interface)\b|\b(?:provision|boot|restore|exec|writeFile|snapshot|fork|readFileSync|node|machinen|scp|ssh|pnpm)\b|--[\w-]+|-[a-z]\b|\b\d+\b|\$|[{}()[\].,:;])/g;
+
+function tokenClass(token: string) {
+  if (token.startsWith("//") || token.startsWith("#")) return "text-[#2f7d46]";
+  if (token.startsWith('"') || token.startsWith("'") || token.startsWith("`")) return "text-[#c8ff9a]";
+  if (/^(import|from|const|let|await|async|new|return|if|else|export|function|type|interface)$/.test(token)) return "text-brand font-bold";
+  if (/^(provision|boot|restore|exec|writeFile|snapshot|fork|readFileSync|node|machinen|scp|ssh|pnpm)$/.test(token)) return "text-[#7dffb2]";
+  if (/^(--[\w-]+|-[a-z])$/.test(token)) return "text-[#a6ff6d]";
+  if (/^\d+$/.test(token)) return "text-[#e5ff8a]";
+  if (token === "$" || /^[{}()[\].,:;]$/.test(token)) return "text-[#4fa35f]";
+  return "text-[#88d088]";
+}
+
+function highlightLine(line: string, lineIndex: number) {
+  const pieces: ReactNode[] = [];
+  let lastIndex = 0;
+  CODE_TOKEN_PATTERN.lastIndex = 0;
+
+  for (const match of line.matchAll(CODE_TOKEN_PATTERN)) {
+    const token = match[0];
+    const index = match.index ?? 0;
+
+    if (index > lastIndex) {
+      pieces.push(line.slice(lastIndex, index));
+    }
+
+    pieces.push(
+      <span className={tokenClass(token)} key={`${lineIndex}-${index}-${token}`}>
+        {token}
+      </span>,
+    );
+    lastIndex = index + token.length;
+  }
+
+  if (lastIndex < line.length) {
+    pieces.push(line.slice(lastIndex));
+  }
+
+  return pieces;
+}
+
 function CodeBlock({ title, code }: { title: string; code: string }) {
   return (
     <div className="my-4 max-w-full">
       <div className="flex border border-[#333] border-b-0 bg-[#111] px-4 py-2 text-[#888] uppercase tracking-widest select-none">
         <span>{`> ${title}`}</span>
       </div>
-      <div className="terminal-scroll overflow-x-auto border border-[#333] bg-[#0a0a0a] p-4">
+      <div className="terminal-scroll overflow-x-auto border border-[#333] p-4">
         <pre className="text-[#88d088] leading-relaxed">
-          <code>{code}</code>
+          <code className="block min-w-max">
+            {code.split("\n").map((line, index) => (
+              <span className="block min-h-[1.45em]" key={`${title}-${index}`}>
+                <span className="mr-4 inline-block w-8 select-none text-right text-[#255d35]">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                {highlightLine(line, index)}
+              </span>
+            ))}
+          </code>
         </pre>
       </div>
     </div>
@@ -134,10 +186,7 @@ export const Landing = () => (
         </div>
         <div className="flex gap-6 uppercase tracking-widest">
           <a href="https://github.com/redwoodjs/machinen.dev" className="transition-all hover:text-white hover:underline">
-            [Docs]
-          </a>
-          <a href="https://github.com/redwoodjs/machinen.dev" className="transition-all hover:text-white hover:underline">
-            [GitHub]
+            [Github]
           </a>
         </div>
       </nav>
@@ -147,26 +196,33 @@ export const Landing = () => (
           <img src="/logo.svg" alt="Machinen" className="my-8 h-10 w-auto" />
         </a>
 
-        <pre className="ascii-heading mb-8 mt-4 overflow-x-auto whitespace-pre text-[10px] font-bold leading-[1.1] text-white select-none sm:text-xs md:text-sm">{ASCII_HEADING}</pre>
+        <pre className="ascii-heading mb-8 mt-4 max-w-full overflow-hidden whitespace-pre text-[clamp(4.6px,1.2vw,12px)] font-bold leading-[1.1] text-white select-none">{ASCII_HEADING}</pre>
 
-        <h1 className="sr-only">Boot once. Run anywhere.</h1>
+        <h1 className="sr-only">Boot Once, Run Everywhere.</h1>
         <p className="mb-6 max-w-[65ch] text-[#aaa]">
           A MicroVM that runs on hardware you already own.<br />
           Close your laptop and it hands off to another host.<br />
-          Works across macOS and Linux.
+          Works across macOS, Linux, and Raspberry Pi.
         </p>
 
-        <div className="mb-8 mt-6 flex w-fit flex-col group">
-          <div className="mb-1 text-[#666] select-none"># Install the packages</div>
-          <PromptLine>
-            <code className="text-white">pnpm add @machinen/cli @machinen/runtime</code>
-          </PromptLine>
+        <div className="mb-8 mt-6 flex flex-col gap-3">
+          <div className="text-[#666] select-none"># Start here</div>
+          <div className="flex flex-wrap gap-3">
+            <CopyPromptButton className="cursor-pointer border border-[#333] bg-[#0a0a0a] px-4 py-2 font-mono text-white transition-colors hover:border-brand hover:text-brand" />
+            <a
+              href="https://github.com/redwoodjs/machinen.dev/blob/main/README.md"
+              className="border border-[#333] bg-[#0a0a0a] px-4 py-2 text-white transition-colors hover:border-brand hover:text-brand"
+            >
+              View README.md
+            </a>
+          </div>
         </div>
 
         <div className="mb-16 space-y-1 text-[#888] select-none">
           <div className="mb-2 font-bold text-white">-- COMPATIBILITY --</div>
           <div>[x] Apple Silicon Macs</div>
           <div>[x] arm64 Linux machines</div>
+          <div>[x] Raspberry Pi</div>
           <div>[x] Graviton .metal</div>
           <div className="mt-2 text-[#555]">* /dev/kvm on Linux, Hypervisor.framework on macOS</div>
         </div>
@@ -247,9 +303,9 @@ export const Landing = () => (
             </DeepDive>
 
             <DeepDive title="RUNS ON MACS AND ARM64 LINUX.">
-              Machinen runs on Apple Silicon Macs, arm64 Linux machines, and
-              Graviton .metal instances. On Linux it uses <code>/dev/kvm</code>;
-              on macOS it uses Hypervisor.framework.
+              Machinen runs on Apple Silicon Macs, arm64 Linux machines,
+              Raspberry Pi, and Graviton .metal instances. On Linux it uses
+              <code>/dev/kvm</code>; on macOS it uses Hypervisor.framework.
             </DeepDive>
           </div>
         </section>

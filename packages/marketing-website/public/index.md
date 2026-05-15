@@ -1,6 +1,6 @@
 # Machinen
 
-**Hand off a running coding agent. Between your machines.**
+**Boot Once, Run Everywhere.**
 
 Between your laptop and your desktop. Between your laptop and Machinen Cloud. The whole VM moves — every process, every byte of memory, every open file, every timer. The agent never restarts. It picks up exactly where it left off.
 
@@ -101,7 +101,7 @@ Mount a host directory into the VM under `/mnt/`, and the guest sees your edits 
 
 ## Runs on Macs and arm64 Linux.
 
-Machinen runs on Apple Silicon Macs, arm64 Linux machines, and Graviton .metal instances. On Linux it uses `/dev/kvm`; on macOS it uses Hypervisor.framework.
+Machinen runs on Apple Silicon Macs, arm64 Linux machines, Raspberry Pi, and Graviton .metal instances. On Linux it uses `/dev/kvm`; on macOS it uses Hypervisor.framework.
 
 ---
 
