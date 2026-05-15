@@ -61,11 +61,11 @@ const ASCII_HEADING = String.raw` ____   ___   ___ _____    ___  _   _  ____ ___
 | |_) | |_| | |_| || |   | |_| | |\  | |___| |___ 
 |____/ \___/ \___/ |_|    \___/|_| \_|\____|_____|
 
- ____  _   _ _   _      _    _   ___   ____ _   _ _____ ____  _____ 
-|  _ \| | | | \ | |    / \  | \ | \ \ / / | | | | ____|  _ \| ____|
-| |_) | | | |  \| |   / _ \ |  \| |\ V /| |_| | |  _| | |_) |  _|  
-|  _ <| |_| | |\  |  / ___ \| |\  | | | |  _  | | |___|  _ <| |___ 
-|_| \_\\___/|_| \_| /_/   \_\_| \_| |_| |_| |_| |_____|_| \_\_____|`;
+ ____  _   _ _   _      _    _   _ __   __ _    _ _   _ _____ ____  _____ 
+|  _ \| | | | \ | |    / \  | \ | |\ \ / /| |  | | | | | ____|  _ \| ____|
+| |_) | | | |  \| |   / _ \ |  \| | \ V / | |/\| | |_| |  _| | |_) |  _|  
+|  _ <| |_| | |\  |  / ___ \| |\  |  | |  |  /\  |  _  | |___|  _ <| |___ 
+|_| \_\\___/|_| \_| /_/   \_\_| \_|  |_|  |_/  \_|_| |_|_____|_| \_\_____|`;
 
 function SectionTitle({ children }: { children: ReactNode }) {
   return (
@@ -130,7 +130,7 @@ export const Landing = () => (
     <div className="mx-auto w-full max-w-[100ch] px-4 py-8 leading-relaxed md:py-12">
       <nav className="mb-8 flex flex-col gap-4 border-b border-[#333] pb-4 text-[#888] sm:flex-row sm:justify-between">
         <div>
-          <span className="text-brand">root@machinen</span><span className="text-white">:~</span>$ ./docs.sh
+          <span className="text-brand">root@machinen</span><span className="text-white">:~</span>$ cat marketing.md
         </div>
         <div className="flex gap-6 uppercase tracking-widest">
           <a href="https://github.com/redwoodjs/machinen.dev" className="transition-all hover:text-white hover:underline">
