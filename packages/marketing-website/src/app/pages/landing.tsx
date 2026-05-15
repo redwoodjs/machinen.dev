@@ -53,7 +53,7 @@ $ scp ./agent.tar.gz ./agent.snap desktop:
 $ ssh desktop machinen restore ./agent.snap`;
 
 const FORK_SDK = `const child = await vm.fork({ name: "agent-b" });
-// Two agents. Same heap. Diverging from this instant.`;
+// agent-b starts from the same running state, then goes its own way.`;
 
 const FORK_CLI = `$ machinen fork agent --new-name agent-b --detach`;
 
@@ -65,12 +65,13 @@ export const Landing = () => (
       </a>
     </header>
     <main>
-      <h1>Hand off a running coding agent. Between your machines.</h1>
+      <h1>Boot once. Run anywhere.</h1>
       <p>
-        Between your laptop and your desktop. Between your laptop and
-        Machinen Cloud. The whole VM moves — every process, every byte of
-        memory, every open file, every timer. The agent never restarts. It
-        picks up exactly where it left off.
+        A MicroVM that runs on hardware you already own.
+        <br />
+        Close your laptop and it hands off to another host.
+        <br />
+        Works across macOS and Linux.
       </p>
 
       <p>
@@ -80,79 +81,79 @@ export const Landing = () => (
       </p>
 
       <section>
-        <h2>The round trip.</h2>
+        <h2>Pause here. Resume there.</h2>
         <p>
-          Your agent is building a feature on your laptop — but you've got to
-          step out. You close your lid and everything pauses: the running
-          test, the open file handles, the half-written diff. Ship the frozen
-          VM to your desktop. Thaw it, and the agent resumes the diff exactly
-          where it stopped. Tomorrow morning, ship it back to your laptop.
-          It never noticed it moved.
+          Your agent is mid-task on your laptop, but you need to leave.
+          Machinen freezes the whole VM — the running process, memory, open
+          files, and timers — into a snapshot. Move that snapshot to your
+          desktop and restore it. The agent picks up from the same moment,
+          without rebuilding context or starting over. Send it back later the
+          same way.
         </p>
         <HandoffAnimation />
       </section>
 
       <section>
-        <h2>How it looks.</h2>
+        <h2>Use it from TypeScript or the shell.</h2>
         <p>
-          The whole arc in one walkthrough: bake the VM, boot it, drive it
-          from your Node process, snapshot it, restore it on another
-          machine. Same primitives in TypeScript or at the shell.
+          The workflow is the same either way: bake an image, boot the VM,
+          run commands inside it, snapshot it, and restore it on another
+          machine. Use the TypeScript API when you're building automation,
+          or the CLI when you're working from a terminal.
         </p>
         <CodeTabs sdk={ROUND_TRIP_SDK} cli={ROUND_TRIP_CLI} />
       </section>
 
       <section>
-        <h2>What handoff buys you.</h2>
+        <h2>Freeze, move, or copy a running VM.</h2>
         <p>
-          Three motions fall out of being able to freeze and thaw a running
-          VM.
+          Once Machinen can pause a VM without losing its state, you get
+          three useful operations.
         </p>
         <p>
-          <strong>Snapshot</strong> — write the running state to disk. Memory,
-          file descriptors, timers, all of it. The bundle is a directory you
-          can ship anywhere.
+          <strong>Snapshot</strong> — save the VM exactly as it is right now:
+          memory, open files, timers, and running processes.
         </p>
         <p>
-          <strong>Restore</strong> — thaw a snapshot on another host. The
-          agent comes up exactly where it left off.
+          <strong>Restore</strong> — start that snapshot on another machine.
+          The agent continues from the same moment instead of booting from
+          scratch.
         </p>
         <p>
-          <strong>Fork</strong> — snapshot and restore at the same time,
-          without killing the source. Two agents, same context, same loaded
-          repo, diverging from this instant. Set N copies on the same task —
-          let each try a different approach, and keep the one that lands.
+          <strong>Fork</strong> — make a copy of the running VM and let both
+          continue. Spin up several agents from the same warm state, let them
+          try different approaches, and keep the result that works.
         </p>
         <ForkAnimation />
         <CodeTabs sdk={FORK_SDK} cli={FORK_CLI} />
       </section>
 
       <section>
-        <h2>Not a container.</h2>
+        <h2>A real Linux VM, defined in TypeScript.</h2>
         <p>
-          Machinen runs real Linux microVMs — that's what makes snapshot and
-          restore possible in the first place. You build the VM in
-          TypeScript: install packages, write files, set the command.
-          Everything in code. No Dockerfile.
+          Machinen runs microVMs, not containers. Snapshot and restore happen
+          at the VM boundary, so the guest moves as one unit: kernel,
+          processes, memory, files, and timers. Build the image in
+          TypeScript: install packages, write files, choose the command. No
+          Dockerfile.
         </p>
       </section>
 
       <section>
-        <h2>Live mounts and port forwards.</h2>
+        <h2>Mount files and forward ports.</h2>
         <p>
-          Drop a host directory into the guest under <code>/mnt/</code>; the
-          VM sees edits instantly, over a FUSE-over-vsock channel. Forward as
-          many guest ports to the host as you want — no NAT setup. Both shown
-          inline in the walkthrough above.
+          Mount a host directory into the VM under <code>/mnt/</code>, and the
+          guest sees your edits as you make them. Forward guest ports to your
+          host with one option. No networking setup, no NAT rules.
         </p>
       </section>
 
       <section>
-        <h2>Compatibility</h2>
+        <h2>Runs on Macs and arm64 Linux.</h2>
         <p>
-          Runs on Apple Silicon Macs, bare-metal arm64 Linux, and Graviton
-          .metal — anywhere <code>/dev/kvm</code> is available (or
-          Hypervisor.framework, on macOS).
+          Machinen runs on Apple Silicon Macs, arm64 Linux machines, and
+          Graviton .metal instances. On Linux it uses <code>/dev/kvm</code>;
+          on macOS it uses Hypervisor.framework.
         </p>
       </section>
 
