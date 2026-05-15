@@ -69,7 +69,7 @@ cache (populated by `machinen install`, or auto-fetched on first use).
 | `--env KEY=VALUE`                               | Set an env var inside the guest (repeatable)                                                                                               |
 | `--cwd <abs-path>`                              | Start the guest cmd in this directory (must be absolute)                                                                                   |
 | `-p <hostPort>:<guestPort>`                     | Forward a host TCP port to the guest (repeatable)                                                                                          |
-| `--detached`                                    | Detach the VMM from the CLI on first-guest-byte readiness; reattach with `attach`. Mutually exclusive with `--mount`, `--mount-live`, `-p` |
+| `--detached`                                    | Detach the VMM from the CLI on first-guest-byte readiness; reattach with `attach`. Composes with `--mount`, `--mount-live`, and `-p`: gvproxy and the live-mount FUSE servers spawn as standalone daemons under `pdeathsig --watch-pid <vmm>` so they outlive the parent. |
 | `--memory <mib>`                                | Guest RAM ceiling, decimal MiB. Debug knob — defaults to `min(host_ram_mib/2, 16384)`, floor 512. See #263                                 |
 | `--snapshot <path>`                             | Attach `<path>` as `/dev/vda` — scratch disk for a future `vm.snapshot()`                                                                  |
 

@@ -105,19 +105,21 @@ when:
 For interactive use (a real terminal, full-screen TUIs), `machinen
 attach` is the right tool — same vsock channel, but with a PTY.
 
-## A current limitation: detached boots and mounts
+## Detached boots with mounts and port forwards
 
-If you've used `--detached` before, you'll find that `--mount` and
-`--mount-live` refuse to combine with it: those features keep a FUSE
-relay running in the original Node process, and `--detached` is meant
-to let that Node process exit. The VMM can outlive the parent; the
-mount helpers can't yet. Phase 3 will lift those helpers out into
-standalone daemons so detached boots can have everything.
+`--detached` composes with `--mount`, `--mount-live`, and `-p`. The
+helpers that need to outlive the parent — gvproxy and the live-mount
+FUSE servers — spawn as standalone daemons wrapped through
+`pdeathsig --watch-pid <vmm>`, so they track the VMM's lifetime and
+exit when it does. `--mount` (copy-once squashfs + ext4 overlay) needs
+no runtime relay at all: both files are fd-passed to the VMM at spawn,
+so the supervisor holds no live state afterwards.
 
-`-p` used to be in the same boat, but PR3 detached gvproxy too: its
-pid lives in the registry, `exposePort` runs before detach completes,
-and `machinen stop` reaps it on shutdown. So `boot --detached -p ...`
-and `fork --detach -p ...` both work today.
+Helper pids live in the registry alongside the VMM's, so
+`machinen stop` reaps them on shutdown and `machinen ls` surfaces the
+full set under a single name. `boot --detached -p ...`,
+`boot --detached --mount-live ...`, and `fork --detach ...` with any
+combination of these flags all work today.
 
 ## Custom gvproxy
 
