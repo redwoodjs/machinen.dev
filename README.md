@@ -189,7 +189,7 @@ Three runnable demos live in [`examples/`](./examples):
   agent installed, then fork three siblings that each answer a different
   prompt in parallel.
 - [`live-mount`](./examples/live-mount) — host directory mounted into
-  the guest over a FUSE-over-vsock channel; bidirectional, no rebuild
+  the guest over an in-VMM virtio-fs device; bidirectional, no rebuild
   on edit.
 
 ## Other ways to boot

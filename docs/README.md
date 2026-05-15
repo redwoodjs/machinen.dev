@@ -7,6 +7,7 @@ Start here:
 Then dive deeper:
 
 - [Create a VM](./guides/create-a-vm.md) — the three ways to get a workload running
+- [Hand off a running VM](./guides/handoff.md) — snapshot → transfer → restore
 - [Snapshot, restore, and fork](./guides/snapshot-restore-fork.md) — clone a
   running process, branching futures from one heap
 - [Mount files into a VM](./guides/mount-files.md) — `--mount`, `--mount-live`, `vm.writeFile`
